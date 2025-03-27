@@ -62,7 +62,7 @@ def send_broadcast(connections, data):
             if "action" in data and data["action"] == "playerlist":
                 # we need to insert "currentPlayer" into player list broadcasts
                 for player in data["players"]:
-                    player["currentPlayer"] = (connection==player["connectionId"])
+                    player["currentPlayer"] = connection==player["connectionId"]
 
             MANAGEMENT.post_to_connection(
                 Data=json.dumps(data),
@@ -229,7 +229,7 @@ def trivia_calculate_scores(event, _):
         last_answer = connection["lastAnswer"] if "lastAnswer" in connection else ""
 
         if last_question_id == question["id"] and last_answer == question["answer"]:
-            score += 10
+            score += 20
             TABLE.update_item(
                 Key={"gameId": game_id, "connectionId": connection_id},
                 AttributeUpdates={"score": {'Value': score, "Action": "PUT"}}
